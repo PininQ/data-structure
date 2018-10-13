@@ -105,6 +105,26 @@ bool ListDelete(SqList *&L, int i, ElemType &e)
     return true; // 成功删除返回 true
 }
 
+/* 两个线性表元素的并集 */
+void unionList(SqList *LA, SqList *LB, SqList *&LC)
+{
+    int lena, i;
+    ElemType e;
+    InitList(LC);
+    for (i = 1; i <= ListLength(LA); i++) // 将 LA 的所有元素插入到 LC 中
+    {
+        GetElem(LA, i, e);
+        ListInsert(LC, i, e);
+    }
+    lena = ListLength(LA); // 求线性表 LA 的长度
+    for (i = 1; i <= ListLength(LB); i++)
+    {
+        GetElem(LB, i, e);      // 取 LB 中第 i 个元素赋给 e
+        if (!LocateElem(LA, e)) // LA 中不存在和 e 相同的元素，则插入到 LC 中
+            ListInsert(LC, ++lena, e);
+    }
+}
+
 int main()
 {
     SqList *L;
@@ -123,5 +143,31 @@ int main()
     ListDelete(L, 3, e);                                       // 删除第3个元素值
     DispList(L);                                               // 输出顺序线性表 L 各元素值
     DestroyList(L);                                            // 销毁顺序线性表 L 所占用内存空间
+
+    /* 测试 unionList */
+    SqList *LA, *LB, *LC;
+    InitList(LA);
+    InitList(LB);
+    /* 构造LA = {1, 3, 2} */
+    ListInsert(LA, 1, 1);
+    ListInsert(LA, 2, 3);
+    ListInsert(LA, 3, 2);
+    cout << "LA:";
+    DispList(LA);
+    /* 构造LB = {1, 4, 2} */
+    ListInsert(LB, 1, 1);
+    ListInsert(LB, 2, 4);
+    ListInsert(LB, 3, 2);
+    cout << "LB:";
+    DispList(LB);
+    /* 将 LA 和 LB 元素值的并集插入到 LC */
+    unionList(LA, LB, LC);
+    cout << "LC=LA∪LB" << endl;
+    cout << "LC:";
+    DispList(LC);
+    /* 销毁 LA, LB, LC 占用内存 */
+    DestroyList(LA);
+    DestroyList(LB);
+    DestroyList(LC);
     return 0;
 }
