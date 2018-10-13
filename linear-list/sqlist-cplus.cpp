@@ -125,7 +125,38 @@ void unionList(SqList *LA, SqList *LB, SqList *&LC)
     }
 }
 
-int main()
+/* 方法1：删除 L 中所有等于 x 的元素 */
+void delnode1(SqList *&L, ElemType x)
+{
+    int k = 0, i;
+    for (i = 0; i < L->length; i++)
+        if (L->data[i] != x)
+        {
+            L->data[k] = L->data[i];
+            k++;
+            // 可以简化
+            // L->data[k++] = L->data[i];
+        }
+    L->length = k;
+}
+
+/* 方法2：删除 L 中所有等于 x 的元素 */
+void delnode2(SqList *&L, ElemType x)
+{
+    int k = 0, i = 0; // k 记录值为 x 的元素个数
+    while (i < L->length)
+    {
+        if (L->data[i] == x)
+            k++;
+        else
+            L->data[i - k] = L->data[i]; // 当前元素前移 k 个位置
+        i++;
+    }
+    L->length -= k; // 顺序表 L 的长度递减 k
+}
+
+/* 测试1 顺序表 */
+void test01()
 {
     SqList *L;
     ElemType e;
@@ -143,8 +174,11 @@ int main()
     ListDelete(L, 3, e);                                       // 删除第3个元素值
     DispList(L);                                               // 输出顺序线性表 L 各元素值
     DestroyList(L);                                            // 销毁顺序线性表 L 所占用内存空间
+}
 
-    /* 测试 unionList */
+/* 测试2 unionList */
+void test02()
+{
     SqList *LA, *LB, *LC;
     InitList(LA);
     InitList(LB);
@@ -169,5 +203,29 @@ int main()
     DestroyList(LA);
     DestroyList(LB);
     DestroyList(LC);
+}
+
+/* 测试3 delnode1 && delnode2 */
+void test03()
+{
+    ElemType a[] = {1, 2, 2, 1, 0, 2, 4, 2, 3, 1};
+    ElemType x = 2;
+    SqList *L;
+    CreateList(L, a, 10);
+    cout << "L:";
+    DispList(L);
+    cout << "删除值为 " << x << " 的元素" << endl;
+    // delnode1(L, x);
+    delnode2(L, x);
+    cout << "L:";
+    DispList(L);
+    DestroyList(L);
+}
+
+int main()
+{
+    // test01()；
+    // test02()；
+    test03();
     return 0;
 }
