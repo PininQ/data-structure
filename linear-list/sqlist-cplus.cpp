@@ -1,5 +1,6 @@
 #include <iostream>
 #include <malloc.h>
+#include <stdio.h>
 using namespace std;
 
 #define MaxSize 50 // 顺序线性表的长度
@@ -155,6 +156,35 @@ void delnode2(SqList *&L, ElemType x)
     L->length -= k; // 顺序表 L 的长度递减 k
 }
 
+/* 以第一个元素为分界线，小于的元素元素移到左边，大于的元素移到右边 */
+void move1(SqList *&L)
+{
+    int i = 0, j = L->length - 1;
+    ElemType pivot = L->data[0]; // 以 dta[0] 为基准
+    ElemType tmp;
+    while (i < j) // 从区间两端交替向中间扫描，直至 i=j 为止
+    {
+        while (i < j && L->data[j] > pivot)
+            j--; // 从右向左扫描，找到第 1 个小于等于 pivot 的元素
+        while (i < j && L->data[i] <= pivot)
+            i++; // 从左向右扫描，找到第 1 个大于 pivot 的元素
+        if (i < j)
+        {
+            tmp = L->data[i]; // L->data[i] 和 L->data[j] 进行交换
+            L->data[i] = L->data[j];
+            L->data[j] = tmp;
+        }
+        // 输出每一趟的结果
+        for (int a = 0; a < L->length; a++)
+            cout << L->data[a] << " ";
+        cout << endl;
+    }
+    tmp = L->data[0]; // L->data[0] 和 L->data[j] 进行交换
+    L->data[0] = L->data[j];
+    L->data[j] = tmp;
+    cout << "基准位置 i=" << i << endl;
+}
+
 /* 测试1 顺序表 */
 void test01()
 {
@@ -222,10 +252,27 @@ void test03()
     DestroyList(L);
 }
 
+/* 测试4 move1 && move2 */
+void test04()
+{
+    SqList *L;
+    // ElemType a[] = {3, 8, 2, 7, 1, 5, 3, 4, 6, 0};
+    ElemType a[] = {3, 8, 2, 7, 3, 5, 3, 4, 6, 0};
+    CreateList(L, a, 10);
+    cout << "L:";
+    DispList(L);
+    cout << "执行移动运算\n";
+    move1(L);
+    cout << "L:";
+    DispList(L);
+    DestroyList(L);
+}
+
 int main()
 {
     // test01()；
     // test02()；
-    test03();
+    // test03();
+    test04();
     return 0;
 }
