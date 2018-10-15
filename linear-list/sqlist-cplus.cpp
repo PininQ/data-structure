@@ -188,18 +188,19 @@ void move1(SqList *&L)
 void move2(SqList *&L)
 {
     int i = 0, j = L->length - 1;
-    ElemType pivot = L->data[0];
-    while (i < j)
+    ElemType pivot = L->data[0]; // 以 data[0] 为基准
+    while (i < j)                // 从顺序表两端交替向中间扫描，直至 i=j 为止
     {
         while (j > i && L->data[j] > pivot)
-            j--;
-        L->data[i] = L->data[j];
+            j--;                 // 从右向左扫描，找一个小于等于 pivot 的 data[j]
+        L->data[i] = L->data[j]; // 找到这样的 data[j]，放入 data[i] 处
         i++;
         while (i < j && L->data[i] <= pivot)
-            i++;
-        L->data[j] = L->data[i];
+            i++;                 // 从左向右扫描，找一个大于 pivot 的 data[i]
+        L->data[j] = L->data[i]; // 找到这样的 data[i],放入 data[j] 处
         j--;
 
+        // 显示每一趟的结果
         for (int a = 0; a < L->length; a++)
             cout << L->data[a];
         cout << endl;
