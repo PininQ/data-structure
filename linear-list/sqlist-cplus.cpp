@@ -182,7 +182,30 @@ void move1(SqList *&L)
     tmp = L->data[0]; // L->data[0] 和 L->data[j] 进行交换
     L->data[0] = L->data[j];
     L->data[j] = tmp;
-    cout << "基准位置 i=" << i << endl;
+    cout << "基准位置（下标） i=" << i << endl;
+}
+
+void move2(SqList *&L)
+{
+    int i = 0, j = L->length - 1;
+    ElemType pivot = L->data[0];
+    while (i < j)
+    {
+        while (j > i && L->data[j] > pivot)
+            j--;
+        L->data[i] = L->data[j];
+        i++;
+        while (i < j && L->data[i] <= pivot)
+            i++;
+        L->data[j] = L->data[i];
+        j--;
+
+        for (int a = 0; a < L->length; a++)
+            cout << L->data[a];
+        cout << endl;
+    }
+    L->data[i] = pivot;
+    cout << "基准位置（下标） i=" << i << endl;
 }
 
 /* 测试1 顺序表 */
@@ -262,7 +285,8 @@ void test04()
     cout << "L:";
     DispList(L);
     cout << "执行移动运算\n";
-    move1(L);
+    // move1(L);
+    move2(L);
     cout << "L:";
     DispList(L);
     DestroyList(L);
